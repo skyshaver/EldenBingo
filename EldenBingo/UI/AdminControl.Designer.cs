@@ -41,13 +41,14 @@
             _adminStatusLabel = new Label();
             label3 = new Label();
             _lobbySettingsButton = new Button();
+            _getMatchLogButton = new Button();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Font = new Font("Segoe UI", 11.25F);
             label1.ForeColor = Color.White;
             label1.Location = new Point(14, 41);
             label1.Name = "label1";
@@ -57,7 +58,7 @@
             // 
             // _bingoJsonTextBox
             // 
-            _bingoJsonTextBox.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _bingoJsonTextBox.Font = new Font("Segoe UI", 11.25F);
             _bingoJsonTextBox.HideSelection = false;
             _bingoJsonTextBox.Location = new Point(163, 38);
             _bingoJsonTextBox.Name = "_bingoJsonTextBox";
@@ -66,7 +67,7 @@
             // 
             // _browseJsonButton
             // 
-            _browseJsonButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _browseJsonButton.Font = new Font("Segoe UI", 11.25F);
             _browseJsonButton.Location = new Point(432, 38);
             _browseJsonButton.Name = "_browseJsonButton";
             _browseJsonButton.Size = new Size(85, 29);
@@ -77,7 +78,7 @@
             // 
             // _uploadJsonButton
             // 
-            _uploadJsonButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _uploadJsonButton.Font = new Font("Segoe UI", 11.25F);
             _uploadJsonButton.Location = new Point(523, 38);
             _uploadJsonButton.Name = "_uploadJsonButton";
             _uploadJsonButton.Size = new Size(85, 29);
@@ -88,7 +89,7 @@
             // 
             // _generateNewBoardButton
             // 
-            _generateNewBoardButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _generateNewBoardButton.Font = new Font("Segoe UI", 11.25F);
             _generateNewBoardButton.Location = new Point(193, 71);
             _generateNewBoardButton.Name = "_generateNewBoardButton";
             _generateNewBoardButton.Size = new Size(185, 29);
@@ -99,7 +100,7 @@
             // 
             // _stopMatchButton
             // 
-            _stopMatchButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _stopMatchButton.Font = new Font("Segoe UI", 11.25F);
             _stopMatchButton.Location = new Point(263, 108);
             _stopMatchButton.Name = "_stopMatchButton";
             _stopMatchButton.Size = new Size(115, 29);
@@ -110,7 +111,7 @@
             // 
             // _pauseMatchButton
             // 
-            _pauseMatchButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _pauseMatchButton.Font = new Font("Segoe UI", 11.25F);
             _pauseMatchButton.Location = new Point(138, 108);
             _pauseMatchButton.Name = "_pauseMatchButton";
             _pauseMatchButton.Size = new Size(115, 29);
@@ -121,7 +122,7 @@
             // 
             // _startMatchButton
             // 
-            _startMatchButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _startMatchButton.Font = new Font("Segoe UI", 11.25F);
             _startMatchButton.Location = new Point(14, 108);
             _startMatchButton.Name = "_startMatchButton";
             _startMatchButton.Size = new Size(115, 29);
@@ -137,7 +138,7 @@
             // _adminStatusLabel
             // 
             _adminStatusLabel.AutoSize = true;
-            _adminStatusLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _adminStatusLabel.Font = new Font("Segoe UI", 11.25F);
             _adminStatusLabel.Location = new Point(379, 110);
             _adminStatusLabel.Name = "_adminStatusLabel";
             _adminStatusLabel.Size = new Size(0, 20);
@@ -146,7 +147,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Font = new Font("Segoe UI", 11.25F);
             label3.ForeColor = Color.White;
             label3.Location = new Point(8, 9);
             label3.Name = "label3";
@@ -156,7 +157,7 @@
             // 
             // _lobbySettingsButton
             // 
-            _lobbySettingsButton.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            _lobbySettingsButton.Font = new Font("Segoe UI", 11.25F);
             _lobbySettingsButton.Location = new Point(14, 71);
             _lobbySettingsButton.Name = "_lobbySettingsButton";
             _lobbySettingsButton.Size = new Size(173, 29);
@@ -165,10 +166,22 @@
             _lobbySettingsButton.UseVisualStyleBackColor = true;
             _lobbySettingsButton.Click += _lobbySettingsButton_Click;
             // 
+            // _getMatchLogButton
+            // 
+            _getMatchLogButton.Font = new Font("Segoe UI", 11.25F);
+            _getMatchLogButton.Location = new Point(385, 108);
+            _getMatchLogButton.Name = "_getMatchLogButton";
+            _getMatchLogButton.Size = new Size(115, 29);
+            _getMatchLogButton.TabIndex = 10;
+            _getMatchLogButton.Text = "Get Match Log";
+            _getMatchLogButton.UseVisualStyleBackColor = true;
+            _getMatchLogButton.Click += _getMatchLogButton_Click;
+            // 
             // AdminControl
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
+            Controls.Add(_getMatchLogButton);
             Controls.Add(_lobbySettingsButton);
             Controls.Add(_adminStatusLabel);
             Controls.Add(label3);
@@ -202,5 +215,6 @@
         private Label _adminStatusLabel;
         private Label label3;
         private Button _lobbySettingsButton;
+        private Button _getMatchLogButton;
     }
 }

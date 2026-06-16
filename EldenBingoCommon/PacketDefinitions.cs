@@ -23,6 +23,7 @@ public record ServerBroadcastMessage(string Message);
 public record ServerUserChangedTeam(Guid UserGuid, int Team, string TeamColorName, UserInRoom[] Users);
 public record ServerUserBannedFromRoom(UserInRoom User, UserInRoom Banner);
 public record ServerPromoteToAdmin(UserInRoom User, UserInRoom Promoter);
+public record ServerMatchLogUpdate(string Message);
 
 #endregion Server to client
 
@@ -32,6 +33,7 @@ public record ClientRequestRoomName();
 public record ClientRequestCreateRoom(string RoomName, string AdminPass, string Nick, int Team, BingoGameSettings Settings);
 public record ClientRequestJoinRoom(string RoomName, string AdminPass, string Nick, int Team);
 public record ClientRequestLeaveRoom();
+public record ClientRequestMatchLog();
 public record ClientCoordinates(float X, float Y, float Angle, bool IsUnderground, MapInstance MapInstance);
 public record ClientChat(string Message);
 public record ClientBingoJson(string Json);

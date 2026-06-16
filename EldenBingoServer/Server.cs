@@ -251,6 +251,7 @@ namespace EldenBingoServer
             AddListener<ClientRequestCreateRoom>(createRoomRequested);
             AddListener<ClientRequestJoinRoom>(joinRoomRequested);
             AddListener<ClientRequestLeaveRoom>(leaveRoomRequested);
+            AddListener<ClientRequestMatchLog>(clientRequestMatchLog);
             AddListener<ClientCoordinates>(clientCoordinates);
             AddListener<ClientChat>(clientChat);
             AddListener<ClientBingoJson>(clientBingoJson);
@@ -571,6 +572,31 @@ namespace EldenBingoServer
                     }
                 }
             }
+        }
+
+        private async void clientRequestMatchLog(BingoClientModel? sender, ClientRequestMatchLog clientRequestMatchLog) 
+        {            
+            if (sender == null || sender?.Room == null)
+                return;
+
+
+            if (sender.Room.MatchEvents.Count > 0)
+            {
+                var log = new MatchLog() { Room = sender.Room.Name, Events = sender.Room.MatchEvents.ToArray() };
+                var json = JsonConvert.SerializeObject(log);
+                var sml = new ServerMatchLogUpdate(json);
+                var packet = new Packet(sml);
+                await SendPacketToClient(packet, sender);
+            }
+            else // send an empty match log
+            {
+                var log = new MatchLog();
+                var json = JsonConvert.SerializeObject(log);
+                var sml = new ServerMatchLogUpdate(json);
+                var packet = new Packet(sml);
+                await SendPacketToClient(packet, sender);
+            }            
+
         }
 
         private async void clientTryCheck(BingoClientModel? sender, ClientTryCheck tryCheck)

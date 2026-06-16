@@ -1,4 +1,5 @@
 ﻿using EldenBingo.Net;
+using EldenBingo.Rendering.Game;
 using EldenBingo.Settings;
 using EldenBingoCommon;
 using Neto.Shared;
@@ -66,6 +67,7 @@ namespace EldenBingo.UI
             Client.OnRoomChanged += client_RoomChanged;
             Client.AddListener<ServerAdminStatusMessage>(adminStatusMessage);
             Client.AddListener<ServerCurrentGameSettings>(receivedGameSettings);
+            Client.AddListener<ServerMatchLogUpdate>(receivedMatchLog);
         }
 
         protected override void ClientChanged()
@@ -82,6 +84,8 @@ namespace EldenBingo.UI
             Client.OnRoomChanged -= client_RoomChanged;
             Client.RemoveListener<ServerAdminStatusMessage>(adminStatusMessage);
             Client.RemoveListener<ServerCurrentGameSettings>(receivedGameSettings);
+            Client.RemoveListener<ServerMatchLogUpdate>(receivedMatchLog);
+            
         }
 
         private void _browseJsonButton_Click(object sender, EventArgs e)
@@ -133,6 +137,12 @@ namespace EldenBingo.UI
         {
             clearFocus();
             await uploadJsonData(_bingoJsonTextBox.Text);
+        }
+
+        private async void _getMatchLogButton_Click(object sender, EventArgs e)
+        {
+            var p = new Packet(new ClientRequestMatchLog());
+            await Client.SendPacketToServer(p);            
         }
 
         private void clearFocus()
@@ -319,6 +329,18 @@ namespace EldenBingo.UI
             Task.Run(() => openSettingsWindow(gameSettingsArgs.GameSettings));
         }
 
+        private void receivedMatchLog(ClientModel? _, ServerMatchLogUpdate matchLogUpdate)
+        {
+            
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "EldenBingoTest.json")))
+            {                
+                outputFile.WriteLine(matchLogUpdate.Message);
+            }
+
+        }
+
         private void openSettingsWindow(BingoGameSettings settings)
         {
             if (Client?.Room == null)
@@ -360,5 +382,7 @@ namespace EldenBingo.UI
             }
             openWindow();
         }
+
+        
     }
 }
