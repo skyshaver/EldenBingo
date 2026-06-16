@@ -333,11 +333,9 @@ namespace EldenBingo.UI
         {
             
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "EldenBingoTest.json")))
-            {                
-                outputFile.WriteLine(matchLogUpdate.Message);
-            }
+
+            using StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "EldenBingoTest.json"));
+            outputFile.WriteLine(matchLogUpdate.Message);
 
         }
 

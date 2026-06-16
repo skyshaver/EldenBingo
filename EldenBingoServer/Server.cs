@@ -251,7 +251,6 @@ namespace EldenBingoServer
             AddListener<ClientRequestCreateRoom>(createRoomRequested);
             AddListener<ClientRequestJoinRoom>(joinRoomRequested);
             AddListener<ClientRequestLeaveRoom>(leaveRoomRequested);
-            AddListener<ClientRequestMatchLog>(clientRequestMatchLog);
             AddListener<ClientCoordinates>(clientCoordinates);
             AddListener<ClientChat>(clientChat);
             AddListener<ClientBingoJson>(clientBingoJson);
@@ -267,6 +266,7 @@ namespace EldenBingoServer
             AddListener<ClientRequestTeamChange>(clientTeamChange);
             AddListener<ClientBanUserFromRoom>(clientBanUser);
             AddListener<ClientPromoteToAdmin>(clientPromoteUser);
+            AddListener<ClientRequestMatchLog>(clientRequestMatchLog);
         }
 
         private async void roomNameRequested(BingoClientModel? sender, ClientRequestRoomName request)
