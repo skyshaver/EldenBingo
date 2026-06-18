@@ -579,23 +579,18 @@ namespace EldenBingoServer
             if (sender == null || sender?.Room == null)
                 return;
 
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            };
 
-            if (sender.Room.MatchEvents.Count > 0)
-            {
-                var log = new MatchLog() { Room = sender.Room.Name, Events = sender.Room.MatchEvents.ToArray() };
-                var json = JsonConvert.SerializeObject(log);
-                var sml = new ServerMatchLogUpdate(json);
-                var packet = new Packet(sml);
-                await SendPacketToClient(packet, sender);
-            }
-            else // send an empty match log
-            {
-                var log = new MatchLog();
-                var json = JsonConvert.SerializeObject(log);
-                var sml = new ServerMatchLogUpdate(json);
-                var packet = new Packet(sml);
-                await SendPacketToClient(packet, sender);
-            }            
+            
+            var log = sender.Room.MatchEvents.Count > 0 ? new MatchLog() { Room = sender.Room.Name, Events = sender.Room.MatchEvents.ToArray() } : new MatchLog();
+            log.PrepareLogForSave(sender.Room);
+            var json = JsonConvert.SerializeObject(log, settings);
+            var sml = new ServerMatchLogUpdate(json);
+            var packet = new Packet(sml);
+            await SendPacketToClient(packet, sender);
 
         }
 

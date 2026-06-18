@@ -22,6 +22,35 @@ namespace EldenBingoServer
             Events = Array.Empty<LEvent>();
         }
 
+
+        public void PrepareLogForSave(ServerRoom serverRoom)
+        {
+            if (serverRoom.Match == null)
+            {
+                Console.WriteLine($"Couldn't write match log. No match in room");
+                return;
+            }
+            if (serverRoom.Match.Board == null)
+            {
+                Console.WriteLine($"Couldn't write match log. No board generated in room");
+                return;
+            }
+            DateTime = DateTime.Now;
+            MatchLength = serverRoom.Match.MatchSeconds;
+            Teams = getTeams(serverRoom);
+            var teamsTranslationDict = new Dictionary<int, int>();
+            for (int i = 0; i < Teams.Length; ++i)
+            {
+                teamsTranslationDict[Teams[i].TeamIndex] = i;
+            }
+            Squares = serverRoom.Match.Board.Squares.Select(s => s.Text).ToArray();
+            for (int i = 0; i < Events.Length; ++i)
+            {
+                var e = Events[i];
+                Events[i] = e with { Team = teamsTranslationDict[e.Team] };
+            }
+        }
+
         public void Save(string targetDirectory, ServerRoom serverRoom)
         {
             if (serverRoom.Match == null)
@@ -40,20 +69,9 @@ namespace EldenBingoServer
                 {
                     Directory.CreateDirectory(targetDirectory);
                 }
-                DateTime = DateTime.Now;
-                MatchLength = serverRoom.Match.MatchSeconds;
-                Teams = getTeams(serverRoom);
-                var teamsTranslationDict = new Dictionary<int, int>();
-                for (int i = 0; i < Teams.Length; ++i)
-                {
-                    teamsTranslationDict[Teams[i].TeamIndex] = i;
-                }
-                Squares = serverRoom.Match.Board.Squares.Select(s => s.Text).ToArray();
-                for (int i = 0; i < Events.Length; ++i)
-                {
-                    var e = Events[i];
-                    Events[i] = e with { Team = teamsTranslationDict[e.Team] };
-                }
+
+                PrepareLogForSave(serverRoom);
+
                 var settings = new JsonSerializerSettings
                 {
                     Formatting = Formatting.Indented
