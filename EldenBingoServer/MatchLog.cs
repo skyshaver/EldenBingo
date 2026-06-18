@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace EldenBingoServer
 {
-    internal class MatchLog
+    public class MatchLog
     {
         public string Room { get; set; }
         public DateTime DateTime { get; set; }
@@ -146,7 +146,7 @@ namespace EldenBingoServer
             return name.Replace(' ', '_'); // Replace spaces as well
         }
     }
-    internal record TempTeam(int TeamIndex, string Name, Color Color, ISet<string> Players);
-    internal record LTeam([property: JsonIgnore] int TeamIndex, string Name, Color Color, string[] Players);
-    internal record class LEvent(int Timestamp, int SquareIndex, int Team, string Player, bool Checked, bool Referee);
+    public record TempTeam(int TeamIndex, string Name, Color Color, ISet<string> Players);
+    public record LTeam([property: JsonIgnore] int TeamIndex, string Name, Color Color, string[] Players);
+    public record class LEvent(int Timestamp, int SquareIndex, int Team, string Player, bool Checked, bool Referee);
 }

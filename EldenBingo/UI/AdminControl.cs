@@ -1,6 +1,8 @@
 ﻿using EldenBingo.Net;
 using EldenBingo.Settings;
 using EldenBingoCommon;
+using EldenBingoServer;
+using Newtonsoft.Json;
 using Neto.Shared;
 
 namespace EldenBingo.UI
@@ -331,12 +333,16 @@ namespace EldenBingo.UI
 
         private void receivedMatchLog(ClientModel? _, ServerMatchLogUpdate matchLogUpdate)
         {
-            
+            MatchLog? matchLog = JsonConvert.DeserializeObject<MatchLog>(matchLogUpdate.Message);
             SaveFileDialog saveFileDialog01 = new SaveFileDialog();
             saveFileDialog01.Filter = "JSON File|*.json";
             saveFileDialog01.Title = "Save Match results as JSON";
-            saveFileDialog01.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);            
-            saveFileDialog01.FileName = "EldenBingoResuls.json";
+            saveFileDialog01.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            var roomName = matchLog != null ? matchLog.Room : "NoRoomName";
+            var timeStamp = matchLog != null ? matchLog.DateTime.ToLocalTime().ToString("yyyyMMddTHHmmss") : "NoTimeStamp";
+            saveFileDialog01.FileName = roomName + timeStamp + ".json";
+            
             saveFileDialog01.ShowDialog();
 
             if(saveFileDialog01.FileName != "")
