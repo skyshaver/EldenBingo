@@ -9,6 +9,7 @@ using EldenBingo.Util;
 using EldenBingoCommon;
 using EldenBingoServer;
 using Neto.Shared;
+using Newtonsoft.Json;
 using SFML.System;
 using System.Diagnostics;
 using System.Reflection;
@@ -392,6 +393,8 @@ namespace EldenBingo
             client.AddListener<ServerUserChecked>(userCheckedSquare);
             client.AddListener<ServerBingoAchievedUpdate>(bingoAchieved);
             client.AddListener<ServerBroadcastMessage>(onServerMessage);
+            client.AddListener<ServerMatchLogUpdate>(receivedMatchLog);
+            client.AddListener<ServerMatchStatusUpdate>(onMatchStatusUpdate);
         }
 
 
@@ -528,7 +531,8 @@ namespace EldenBingo
             void update()
             {
                 _clientStatusTextBox.Text = _client.GetConnectionStatusString();
-            };
+            }
+            ;
             if (InvokeRequired)
             {
                 BeginInvoke(update);
@@ -763,7 +767,7 @@ namespace EldenBingo
                     {
                         windowSize = new Size(500, 500);
                     }
-                    
+
                     Point mapLocation;
                     if (Properties.Settings.Default.MapWindowCustomPosition && Properties.Settings.Default.MapWindowX >= 0 && Properties.Settings.Default.MapWindowY >= 0)
                     {
@@ -805,6 +809,8 @@ namespace EldenBingo
             client.RemoveListener<ServerJoinRoomAccepted>(joinRoomAccepted);
             client.RemoveListener<ServerJoinRoomDenied>(joinRoomDenied);
             client.RemoveListener<ServerEntireBingoBoardUpdate>(gotBingoBoard);
+            client.RemoveListener<ServerMatchLogUpdate>(receivedMatchLog);
+            client.RemoveListener<ServerMatchStatusUpdate>(onMatchStatusUpdate);
         }
 
         private void server_OnStatus(object? sender, StringEventArgs e)
@@ -895,6 +901,10 @@ namespace EldenBingo
                 _leaveRoomButton.Visible = inRoom;
                 _changeTeamButton.Visible = inRoom;
 
+
+                bool matchIsFinished = _client?.Room?.Match.MatchStatus == MatchStatus.Finished;
+                _matchLogButton.Visible = matchIsFinished;
+
                 _createLobbyButton.Enabled = connected;
                 _joinLobbyButton.Enabled = connected;
                 _leaveRoomButton.Enabled = connected;
@@ -905,6 +915,40 @@ namespace EldenBingo
         private void _openExternalBoardToolStripButton_Click(object sender, EventArgs e)
         {
             _lobbyControl.OpenPopoutForm();
+        }
+
+        private async void _matchLogButton_Click(object sender, EventArgs e)
+        {
+            var p = new Packet(new ClientRequestMatchLog());
+            await _client.SendPacketToServer(p);
+        }
+
+
+        private void receivedMatchLog(ClientModel? _, ServerMatchLogUpdate matchLogUpdate)
+        {
+            MatchLog? matchLog = JsonConvert.DeserializeObject<MatchLog>(matchLogUpdate.Message);
+            SaveFileDialog saveFileDialog01 = new SaveFileDialog();
+            saveFileDialog01.Filter = "JSON File|*.json";
+            saveFileDialog01.Title = "Save Match results as JSON";
+            saveFileDialog01.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            var roomName = matchLog != null ? matchLog.Room : "NoRoomName";
+            var timeStamp = matchLog != null ? matchLog.DateTime.ToLocalTime().ToString("yyyyMMddTHHmmss") : "NoTimeStamp";
+            saveFileDialog01.FileName = roomName + timeStamp + ".json";
+
+            saveFileDialog01.ShowDialog();
+
+            if (saveFileDialog01.FileName != "")
+            {
+                // FileName concats open dir with text box 
+                using StreamWriter outputFile = new StreamWriter(saveFileDialog01.FileName);
+                outputFile.WriteLine(matchLogUpdate.Message);
+            }
+        }
+
+        private void onMatchStatusUpdate(ClientModel? _, ServerMatchStatusUpdate matchStatusUpdate)
+        {
+            updateButtonAvailability();
         }
     }
 }

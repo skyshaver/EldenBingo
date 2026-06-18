@@ -1,8 +1,6 @@
 ﻿using EldenBingo.Net;
 using EldenBingo.Settings;
 using EldenBingoCommon;
-using EldenBingoServer;
-using Newtonsoft.Json;
 using Neto.Shared;
 
 namespace EldenBingo.UI
@@ -67,8 +65,7 @@ namespace EldenBingo.UI
             Client.Disconnected += client_Disconnected;
             Client.OnRoomChanged += client_RoomChanged;
             Client.AddListener<ServerAdminStatusMessage>(adminStatusMessage);
-            Client.AddListener<ServerCurrentGameSettings>(receivedGameSettings);
-            Client.AddListener<ServerMatchLogUpdate>(receivedMatchLog);
+            Client.AddListener<ServerCurrentGameSettings>(receivedGameSettings);            
         }
 
         protected override void ClientChanged()
@@ -84,9 +81,7 @@ namespace EldenBingo.UI
             Client.Disconnected -= client_Disconnected;
             Client.OnRoomChanged -= client_RoomChanged;
             Client.RemoveListener<ServerAdminStatusMessage>(adminStatusMessage);
-            Client.RemoveListener<ServerCurrentGameSettings>(receivedGameSettings);
-            Client.RemoveListener<ServerMatchLogUpdate>(receivedMatchLog);
-            
+            Client.RemoveListener<ServerCurrentGameSettings>(receivedGameSettings);                        
         }
 
         private void _browseJsonButton_Click(object sender, EventArgs e)
@@ -138,12 +133,6 @@ namespace EldenBingo.UI
         {
             clearFocus();
             await uploadJsonData(_bingoJsonTextBox.Text);
-        }
-
-        private async void _getMatchLogButton_Click(object sender, EventArgs e)
-        {
-            var p = new Packet(new ClientRequestMatchLog());
-            await Client.SendPacketToServer(p);            
         }
 
         private void clearFocus()
@@ -328,32 +317,6 @@ namespace EldenBingo.UI
         {
             //Open the settings window without locking the receiver thread
             Task.Run(() => openSettingsWindow(gameSettingsArgs.GameSettings));
-        }
-
-
-        private void receivedMatchLog(ClientModel? _, ServerMatchLogUpdate matchLogUpdate)
-        {
-            MatchLog? matchLog = JsonConvert.DeserializeObject<MatchLog>(matchLogUpdate.Message);
-            SaveFileDialog saveFileDialog01 = new SaveFileDialog();
-            saveFileDialog01.Filter = "JSON File|*.json";
-            saveFileDialog01.Title = "Save Match results as JSON";
-            saveFileDialog01.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            var roomName = matchLog != null ? matchLog.Room : "NoRoomName";
-            var timeStamp = matchLog != null ? matchLog.DateTime.ToLocalTime().ToString("yyyyMMddTHHmmss") : "NoTimeStamp";
-            saveFileDialog01.FileName = roomName + timeStamp + ".json";
-            
-            saveFileDialog01.ShowDialog();
-
-            if(saveFileDialog01.FileName != "")
-            {
-                // FileName concats open dir with text box 
-                using StreamWriter outputFile = new StreamWriter(saveFileDialog01.FileName);
-                outputFile.WriteLine(matchLogUpdate.Message);
-            }
-
-            
-
         }
 
         private void openSettingsWindow(BingoGameSettings settings)

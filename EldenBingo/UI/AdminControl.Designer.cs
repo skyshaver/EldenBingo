@@ -41,7 +41,6 @@
             _adminStatusLabel = new Label();
             label3 = new Label();
             _lobbySettingsButton = new Button();
-            _getMatchLogButton = new Button();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -166,22 +165,10 @@
             _lobbySettingsButton.UseVisualStyleBackColor = true;
             _lobbySettingsButton.Click += _lobbySettingsButton_Click;
             // 
-            // _getMatchLogButton
-            // 
-            _getMatchLogButton.Font = new Font("Segoe UI", 11.25F);
-            _getMatchLogButton.Location = new Point(385, 108);
-            _getMatchLogButton.Name = "_getMatchLogButton";
-            _getMatchLogButton.Size = new Size(115, 29);
-            _getMatchLogButton.TabIndex = 10;
-            _getMatchLogButton.Text = "Get Match Log";
-            _getMatchLogButton.UseVisualStyleBackColor = true;
-            _getMatchLogButton.Click += _getMatchLogButton_Click;
-            // 
             // AdminControl
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            Controls.Add(_getMatchLogButton);
             Controls.Add(_lobbySettingsButton);
             Controls.Add(_adminStatusLabel);
             Controls.Add(label3);
@@ -215,6 +202,5 @@
         private Label _adminStatusLabel;
         private Label label3;
         private Button _lobbySettingsButton;
-        private Button _getMatchLogButton;
     }
 }
