@@ -1,5 +1,4 @@
 ﻿using EldenBingo.Net;
-using EldenBingo.Rendering.Game;
 using EldenBingo.Settings;
 using EldenBingoCommon;
 using Neto.Shared;
@@ -329,13 +328,25 @@ namespace EldenBingo.UI
             Task.Run(() => openSettingsWindow(gameSettingsArgs.GameSettings));
         }
 
+
         private void receivedMatchLog(ClientModel? _, ServerMatchLogUpdate matchLogUpdate)
         {
             
-            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            SaveFileDialog saveFileDialog01 = new SaveFileDialog();
+            saveFileDialog01.Filter = "JSON File|*.json";
+            saveFileDialog01.Title = "Save Match results as JSON";
+            saveFileDialog01.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);            
+            saveFileDialog01.FileName = "EldenBingoResuls.json";
+            saveFileDialog01.ShowDialog();
 
-            using StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "EldenBingoTest.json"));
-            outputFile.WriteLine(matchLogUpdate.Message);
+            if(saveFileDialog01.FileName != "")
+            {
+                // FileName concats open dir with text box 
+                using StreamWriter outputFile = new StreamWriter(saveFileDialog01.FileName);
+                outputFile.WriteLine(matchLogUpdate.Message);
+            }
+
+            
 
         }
 
